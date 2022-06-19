@@ -1,0 +1,242 @@
+.THIS .buttonPadding {
+    margin-left: -1px;
+    margin-top: 41px;
+}
+
+.THIS .slds-text-heading_small{
+    font-size: 18px;
+    line-height: 1.25;
+    font-weight: bold;
+}
+.THIS .ptag{
+    padding-left: 10px;
+    color: red;
+    text-decoration: solid;
+}
+.THIS .charDiv{
+    display: inline-flex;
+    padding-left: 20%;
+    padding-bottom: 10px;
+}
+.THIS .numberDiv{
+    margin-left: 20px;
+    display: -webkit-box;
+    border-radius: 11px;
+    background-color: blanchedalmond;
+    padding-top: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: -8px;
+    font-style: unset;
+}
+
+.THIS .inputCls{
+    flex-grow: 1;
+    margin-top: -24px;
+    
+}
+
+.THIS .innerDiv{
+    display: -webkit-inline-box;
+}
+
+.THIS .slds-p-around--small{
+    padding: .75rem;
+    width: 100%;
+}
+.THIS .slds-input[readonly]{
+    padding-left: 0;
+    border-color: transparent;
+    background-color: transparent;
+    font-size: .875rem;
+    font-weight: 400;
+    width: 180%;
+}
+.THIS .downUtility{
+    text-align: -webkit-right;
+    padding-top: 10px;
+    padding-right: 5px;
+}
+
+.THIS .customP{
+    padding-bottom: 5px;
+    padding-top: 6px;
+}
+.THIS .customLayoutItem{
+    padding-right: 70px;
+    padding-top: 0px;
+    max-width: 25rem;
+    min-width: 20rem;
+}
+.THIS .sendUitility{
+    height: 37px;
+    width: 37px;
+}
+.THIS .slds-card__header{
+    padding: 0px;
+    margin : 0px;
+    height: 0px;
+}
+
+/* .THIS .slds-card{
+background-color: #f7f7f7;
+} */
+
+.THIS .slds-chat-bookend{
+    justify-content: unset;
+    padding-top:0px;
+    background-color: #f7f7f7;
+    margin-top: -8px;
+    padding-top: 8px;
+    border-radius: .25rem .25rem 0 0;
+}
+.THIS .slds-text-heading_small{
+    font-size: 18px;
+    line-height: 1.25;
+    font-weight: normal;
+    color: aliceblue;
+    font-family: serif;
+}
+.THIS .slds-select_container{
+    position: relative;
+    width: 135%;
+}
+.THIS .modal__container{
+    margin: 10% auto;
+    width: 50%;
+    max-width: 30rem;
+    min-width: 20rem;
+}
+.THIS .slds-not-selected .slds-text-not-selected{
+    display: inline-flex;
+}
+
+.THIS .tempButton{
+    padding-top: 20px;
+    margin-left: 15px;
+}
+.THIS .cardStyle{
+    margin-bottom: -1.5rem;
+}
+.THIS .slds-card__body{
+    margin-bottom: 0px;
+}
+.THIS .messages-box {
+    width: 100%;
+    padding-top: 2%;
+    padding-left: 2%;
+    padding-right: 2%;
+    background-color:#f7f7f7;
+    padding-bottom: unset;
+    float: left;
+    border-radius: .25rem;
+}
+.THIS .attachment {
+    width: 96%;
+    float: left;
+    position: relative;
+    bottom: 15px;
+}
+.THIS .messages-box .send-message {
+    width: 10%;
+    float: left;
+    height: 36px;
+    text-align: center;
+}
+.THIS .messages-box .message-input .message-box {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    min-height: 30px;
+    border-radius: 20px;
+    padding: 6px 15px;
+}
+.THIS .messages-box .message-input {
+    width: 100%;
+    float: left;
+    display: inline-flex;
+}
+
+.THIS .fileuploadIcon{
+    margin-top: -20px;
+    text-align: -webkit-center;
+}
+.THIS .closeIcon{
+    color: red;
+    margin-bottom: 4px;
+}
+.THIS .imgName{
+    padding-left: 16%; 
+    max-width: 300px;
+    width: 76%;
+}
+.THIS .utilityIcon{
+    float: left;  
+}
+.THIS .slds-textarea{
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(221, 219, 218);
+    border-radius: .25rem;
+    transition: border .1s linear,background-color .1s linear;
+    resize: vertical;
+    padding: .5rem .75rem;
+    /*margin-top: -3%;*/
+}
+.THIS .showChar{
+    height: 20px;
+}
+.THIS .ptag1{
+    float: left;
+    color: dodgerblue;
+    padding-left: 3px;
+}
+.THIS .ptag2{
+    float:right;
+    padding-right: 55px;
+}
+.THIS .ptag3{
+    float:right;
+    padding-right: 55px;
+    color: #1e90ff;
+}
+.THIS .tempPri{
+    text-align: justify;
+    width: 88%;
+    margin-left: 13px;
+    border-style: groove;
+    border-width: 1px;
+    padding: 2%;
+}
+.THIS .slds-button_icon-xx-small{
+    padding-bottom: 16px;
+}
+.THIS .customSelect{
+    width: 40%;
+    margin-left: 25%;
+    margin-top: -5%;
+    color: black;
+}
+.THIS .message-input .slds-form-element {
+    width:100%;
+}
+.THIS .message-input .slds-form-element__label {
+    display:none;
+}
+.THIS .slds-datepicker__filter .slds-grow {
+    flex-grow: 0;
+    width: 66%;
+}
+.THIS .select-auto-width  .slds-form-element__control .slds-select_container{
+    display: inline-block;
+    width: 90%;
+    padding: 0px 0px 0px 0px;
+}
+
+.THIS .select-auto-width label{
+    display: none;
+    width: -webkit-fill-available;
+}
+
+.THIS .slds-card__body {
+    margin-top: 0;
+}

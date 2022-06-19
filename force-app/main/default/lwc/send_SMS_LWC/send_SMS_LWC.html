@@ -1,0 +1,87 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 06-01-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+
+  <template if:true={linkClicked}>
+    <lightning-file-upload
+    label="Attach receipt"
+    name="fileUploader"
+    accept={acceptedFormats}
+    record-id={myRecordId}
+    onuploadfinished={handleUploadFinished}
+    multiple
+    
+
+>
+   </lightning-file-upload>
+  </template>
+
+
+  <div style="background-color: white;"> 
+
+ 
+    
+     <div class="slds-section slds-is-open">
+      <div class="slds-align_absolute-center slds-p-top_none slds-theme_shade">
+        <lightning-combobox name="progress" value={defaultUser} placeholder="Select Role"
+          class="slds-p-around_small slds-align_absolute-center" options={usersList} onchange={handleChange}
+          style="width: 95%; " variant="label-hidden"></lightning-combobox>
+
+      </div>
+    </div>   
+    
+    
+    <template  if:true={showChatWindow}>
+      <c-chat-window-l-w-c id-to-get-message={recordId} is-portal={isPortal}></c-chat-window-l-w-c>
+    </template>
+
+
+    <!-- User Input/Message -->
+    <div class="slds-align_absolute-center slds-section slds-is-open slds-theme_shade slds-grid slds-gutters ">
+      <div class="slds-col" style="padding: 2%;">
+        <lightning-layout>
+
+
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-3">
+              <span>              
+                  
+                  <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                      
+                      <lightning-icon size="x-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:link" onclick={handleLinkClick}></lightning-icon>
+                      <c-model-Popup > </c-model-Popup>
+                      <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                    <lightning-icon size="x-small" class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default" icon-name="utility:emoji"></lightning-icon>
+                        <input type="text" id="text-input-id-1" placeholder="Type message" class="slds-input" style="width: auto;" onchange={handleInputChange}/>
+                    </div>
+                  </div>
+
+                              
+              </span>
+            </div>
+            <div class="slds-col slds-size_1-of-3">
+              <span>
+                <lightning-button-icon icon-name="utility:send" variant="brand" size="medium" class="slds-m-top_xx-small"
+                alternative-text="Send Message" onclick={sendMessage}></lightning-button-icon>
+              </span>
+            </div>
+          </div>
+
+         
+
+
+
+          
+        </lightning-layout>
+      </div>
+
+      
+    </div>
+    
+  </div>
+</template>

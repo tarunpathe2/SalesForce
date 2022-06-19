@@ -1,0 +1,269 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"
+                access="global" controller="SendSMS_Controller">
+    <aura:attribute name="recId" type="String" />
+    <aura:attribute name="extId" type="String" default='' />
+    <aura:attribute name="msgSize" type="String" default='1500' />
+    <aura:attribute name="balanceAmount" type="String" />
+    <aura:attribute name="msgContext" type="String" />
+    <aura:attribute name="displayName" type="String" />
+    <aura:attribute name="fromNumber" type="String" />
+    <aura:attribute name="tempList" type="List" />
+    <aura:attribute name="tempId" type="String" />
+    <aura:attribute name="loadChatWindow" type="boolean" default="true"/>
+    <aura:attribute name="isMsgContextFromTemp" type="String" default=" "/>
+    <aura:attribute name="TemplateData" type="String" default='1500' />
+    <aura:attribute name="mergeTemplateData" type="String" />
+    <aura:attribute name="CurrentDateTime" type="DateTime" />
+    <aura:attribute name="ScheduleDate" type="DateTime" />
+    <aura:attribute name="OptIn" type="Boolean" default="false" />
+    <aura:attribute name="OptOut" type="Boolean" default="false" />
+    <aura:attribute name="checkOptOut" type="Boolean" default="false" />
+    <aura:attribute name="isBalSettings" type="Boolean" default="false" />
+    <aura:attribute name="isNumberExists" type="Boolean" default="false" />
+    <aura:attribute name="modalPopup" type="Boolean" default="false" />
+    <aura:attribute name="tempPreview" type="Boolean" default="false" />
+    <aura:attribute name="modalPopupNewTemplate" type="Boolean" default="false" />
+    <aura:attribute name="FilemodalPopup" type="Boolean" default="false" />
+    <aura:attribute name="isScheduleMsg" type="Boolean" default="false" />
+    <aura:attribute name="accept" type="List" default="['.jpg', '.jpeg', '.png']" />
+    <aura:attribute name="MMSLink" type="String" />
+    <aura:attribute name="MMSTitle" type="String" />
+    <aura:attribute name="showBal" type="Boolean" default="false" />
+    <aura:attribute name="heightRem" type="Decimal" default="20" />
+    <aura:attribute name="isPortal" type="Boolean" default="false"/>
+    <aura:attribute name="toNumber" type="String" />
+    <aura:attribute name="phoneNumberListSize" type="Decimal" default="0" />
+    <aura:attribute name="ToNumberList" type="String[]" />
+    <aura:attribute name="ToBorrowerList" type="String[]" />
+    <aura:attribute name="toBorrower" type="String" />
+    <aura:attribute name="ToBorrowerListSize" type="Decimal" default="1" />
+    <aura:attribute name="calledFromUtility" type="Boolean" default="false" />
+    <aura:attribute name="isEntered" type="Boolean" default="false" />
+    <aura:handler name="backEvent" event="c:backToParent" action="{!c.doHandlebackEvent}" />
+    <aura:attribute name="isInitial" type="boolean" default="true"/>	
+    <aura:dependency resource="markup://force:editRecord" type="EVENT" />	
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />	
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />	
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <lightning:empApi aura:id="empApi" />    
+    <lightning:card aura:id="card1">
+        <aura:if isTrue="{!v.Spinner}">
+        </aura:if>
+        <div class="slds-chat-bookend" style="height:47px">
+            <div style="float: Center; text-align:Center; width:100%;" >
+                <aura:if isTrue="{!v.ToBorrowerListSize == 0}">
+                    <p> &nbsp;&nbsp; <b> Borrower Not Present </b></p>
+                </aura:if>
+                <aura:if isTrue="{!v.ToBorrowerListSize == 1}">
+                    <p><Strong>{!v.toBorrower}</Strong></p>
+                </aura:if>
+                <aura:if isTrue="{!v.ToBorrowerListSize > 1}">
+                    <div Style="text-align-last: center; max-width: 100%;">
+                        <lightning:select class="select-auto-width" aura:id="selToNumber"
+                                          variant="label-hidden" onchange="{!c.handleBorrowerPicklist}">
+                            <aura:iteration items="{!v.ToBorrowerList}" var="item">
+                                <option value="{!item}">{!item}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                </aura:if>
+            </div>
+        </div>
+        
+        <aura:if isTrue="{!v.isInitial}">
+            <div style="text-align: center;">
+                
+            </div>
+            <aura:set attribute="else">
+                <div>
+                    <aura:if isTrue="{!v.isNumberExists}">
+                        <div style="padding: 10% 0% 10% 2%;font-size: medium;">
+                            <p style="text-align:center">Phone field mapping dose not exist for this object. 
+                                Please map Phone field on "SMS Configuration" page.</p>
+                        </div>
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!v.ToBorrowerListSize == 0}">
+                                <div style="padding: 10% 0% 10% 2%;font-size: medium;">
+                                    <p style="text-align:center">Phone number does not exist on mapped field.</p>
+                                </div>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </aura:set>
+        </aura:if>
+        <aura:if isTrue="{!and (!v.OptIn,v.OptOut) }">
+            <div class="slds-border_bottom slds-align_absolute-center slds-p-vertical_medium">
+                <aura:if isTrue="{!if(v.ToBorrowerListSize > 0,true,false)}">
+                    <lightning:button label="Request For Opt-In" onclick="{!c.onSendDefault}" variant="brand" />
+                </aura:if>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!!v.isNumberExists}">
+            <aura:if isTrue="{!v.ToBorrowerListSize > 0}">
+               <!-- <aura:if isTrue="{!v.loadChatWindow}">-->
+                    <c:ChatWindow aura:id="chatWindowId" recordId="{!v.recordId}" OptOut="{!v.OptOut}" heightRem="{!v.heightRem}" isPortal="{!v.isPortal}"/>
+                    
+                <!--</aura:if> -->
+                <div class="messages-box">
+                    <aura:if isTrue="{!and(!v.showBal,v.isBalSettings)}">
+                        <div class="showChar">
+                            <p class="ptag1">Msg Cost: $0.0075</p>
+                            <p class="ptag3">
+                                Bal: $
+                                <ui:outputCurrency value="{!v.balanceAmount}" format="0.0000" />
+                            </p>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!or(and(!v.OptOut, v.OptIn), and(!v.OptOut, !v.OptIn))}">
+                        <div>
+                            <div>
+                                <div class="message-input slds-grid slds-wrap">
+                                    <div class="slds-col slds-size_10-of-12">
+                                        <span onkeyup="{!c.keyCheck}">
+                                            <lightning:textarea name="smsBody" placeholder="Type a message here..." label=""
+                                                                maxlength="1500" messageWhenTooLong="A maximum of 1500 characters are allowed."
+                                                                value="{!v.msgContext}" class="slds-p-left_x-small" />
+                                        </span>
+                                    </div>
+                                    
+                                    <div style="text-align: center;" class="slds-col slds-size_2-of-12">
+                                        <span>
+                                            <lightning:buttonIcon iconName="utility:send" variant="brand" size="small"
+                                                                  class="sendUitility slds-m-top_xx-small" alternativeText="Send Message"
+                                                                  onclick="{!c.onSend}" />
+                                        </span>
+                                        <span class="slds-p-around_xx-small">Send</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="ptag2">{!v.msgSize}</p>
+                        </div>
+                        
+                        <div class="attachment">
+                            <lightning:buttonIcon iconName="utility:add" size="small" variant="success"
+                                                  class="utilityIcon" alternativeText="Add Template" onclick="{!c.openTemplateModal}" />
+                            
+                            <lightning:buttonIcon iconName="utility:attach" size="small" variant="success"
+                                                  class="utilityIcon" alternativeText="Attach File" onclick="{!c.openImageModal}" />
+                            
+                            <aura:if isTrue="{!v.MMSTitle != ''}">
+                                <p class="imgName">{!v.MMSTitle}</p>
+                            </aura:if>
+                        </div>
+                    </aura:if>
+                    
+                </div>
+                
+                <div style="clear: both;"></div>
+                
+                <aura:if isTrue="{!v.modalPopup}">
+                    <div class="demo-only" style="height: 640px;">
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="modal__container">
+                                <header class="slds-modal__header">
+                                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Select SMS
+                                        Template</h2>
+                                </header>
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                    <lightning:layout>
+                                        <lightning:layoutItem class="slds-p-around_small customLayoutItem">
+                                            <lightning:select name="select" label="Select Template" aura:id="TempName" onchange="{!c.selectedTemp}">
+                                                <option value="">choose one...</option>
+                                                <aura:iteration items="{!v.tempList}" var="temp">
+                                                    <option text="{!temp.Name}" value="{!temp.Id}" />
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </lightning:layoutItem>
+                                        
+                                        <lightning:layoutItem class="slds-p-around_xx-small tempButton">
+                                            <lightning:buttonIcon iconName="utility:add" size="large" variant="brand" alternativeText="Create New Template" onclick="{!c.newTemplateModal}" />
+                                        </lightning:layoutItem>
+                                        
+                                    </lightning:layout>
+                                    <aura:if isTrue="{!v.tempPreview}">
+                                        <div class="tempPri"
+                                             style="word-break: break-all;max-height: 160px;padding: 0;width: 92%;border: none;margin: 0 auto;">
+                                            <div style="border: 1px solid #ccc;padding: 4%;">
+                                                {!v.TemplateData}
+                                            </div>
+                                        </div>
+                                    </aura:if>
+                                </div>
+                                <footer class="slds-modal__footer">
+                                    <lightning:button disabled="{!v.tempId == null}" variant="neutral" label="Delete" onclick="{!c.onDelete}" />
+                                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.onCancel}" />
+                                    <lightning:button disabled="{!v.tempId == null}" variant="brand" label="Insert" onclick="{!c.onInsert}" />
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </div>
+                    <!--<c:AddTemplateModal/>-->
+                </aura:if>
+                <aura:if isTrue="{!v.modalPopupNewTemplate}">
+                    <c:AddTemplateModal ParentId="{!v.recordId}" aura:id="templateMessageId"/>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.FilemodalPopup}">
+                    <div class="demo-only" style="height: 640px;">
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="modal__container">
+                                <header class="slds-modal__header">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_8-of-12" style="text-align: end;padding-right: 10px;">
+                                            <span>
+                                                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Insert Image</h2>
+                                            </span>
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-12" style="text-align: end;">
+                                            <span>
+                                                <button class="slds-button" onclick="{!c.closeClick}">
+                                                    <lightning:icon class="closeIcon" variant="Error" alternativeText="Close" iconName="utility:close" size="xx-small" />
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </header>
+                                <div class="slds-modal__content slds-p-around_medium fileuploadIcon"
+                                     id="modal-content-id-1">
+                                    <lightning:fileUpload name="fileUploader" label="" accept="{!v.accept}"
+                                                          recordId="{!v.recordId}" onuploadfinished="{!c.handleUploadFinished}" />
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </div>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.isScheduleMsg}">
+                    <div>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="modal__container">
+                                <header class="slds-modal__header">
+                                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Schedule
+                                        Message</h2>
+                                </header>
+                                <div class="slds-modal__content slds-p-around_medium fileuploadIcon"
+                                     id="modal-content-id-1">
+                                    <br />
+                                    <lightning:input type="datetime" aura:id="schedule" value="{!v.CurrentDateTime}"
+                                                     label="Select a date/time" />
+                                </div>
+                                <footer class="slds-modal__footer">
+                                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeSchedule}" />
+                                    <lightning:button variant="brand" label="Schedule" onclick="{!c.onSaveSchedule}" />
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </div>
+                </aura:if>
+            </aura:if>
+        </aura:if>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,19 @@
+/* .slds-card__header.slds-grid{
+    margin-top:-47px;
+} */
+.emoji-icon{
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    /* display: flex; */
+    align-items: center;
+    padding-left: 85%;
+    justify-content: center;
+    right: 1px;
+    height: 30px;
+    width: 30px;
+}
+
+.slds-input-has-icon .slds-input__icon:not(button) {
+    pointer-events: all
+}
