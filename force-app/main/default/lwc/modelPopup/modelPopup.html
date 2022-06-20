@@ -32,13 +32,13 @@
           
           <div class="slds-p-around_medium lgc-bg">
               <lightning-input type="text" label="Text To Display" value={getValueFromParent}> </lightning-input>
-              <lightning-input type="url"  label="Enter a URL" ></lightning-input>
+              <lightning-input type="url" name="input1" label="Enter a URL" onchange={urlentered}  ></lightning-input>
 
           </div>
         </div>
         <div class="slds-modal__footer">
           <button class="slds-button slds-button_neutral" aria-label="Cancel and close">Cancel</button>
-          <button class="slds-button slds-button_brand" >Insert</button>
+          <lightning-button variant="brand" label="insert" onclick={urlinsert}> </lightning-button>
                     
         </div>
 

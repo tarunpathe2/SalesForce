@@ -5,6 +5,7 @@ import fetchMessagesFromServer from '@salesforce/apex/ChatWindow_Controller.getM
 
 
 export default class Send_SMS_LWC extends LightningElement {
+    
     @api value;
     @api recordId;
     @api idToGetMessage;
@@ -39,14 +40,17 @@ export default class Send_SMS_LWC extends LightningElement {
 			var text =" " ;
       if (window.getSelection) {
           text = window.getSelection().toString();
-        alert("This is new"+text);
+          console.log('selected text value'+ text);
+		  this.value=text;
+      console.log('parent value'+ this.value);
         
       } else if (document.selection && document.selection.type != "Control") {
           text = document.selection.createRange().text;
       }
-      return text;
+      return text;  
+      
   
-    } 
+    }  
 
     sendMessage(){
       console.log(

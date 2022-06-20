@@ -34,7 +34,7 @@
 
       </div>
     </div>   
-    
+     
     
     <template  if:true={showChatWindow}>
       <c-chat-window-l-w-c id-to-get-message={recordId} is-portal={isPortal}></c-chat-window-l-w-c>
@@ -54,10 +54,12 @@
                   <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
                       
                       <lightning-icon size="x-small" class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" icon-name="utility:link" onclick={handleLinkClick}></lightning-icon>
-                      <c-model-Popup > </c-model-Popup>
+                      <c-model-Popup get-value-from-parent={value}> </c-model-Popup>
                       <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
                     <lightning-icon size="x-small" class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default" icon-name="utility:emoji"></lightning-icon>
-                        <input type="text" id="text-input-id-1" placeholder="Type message" class="slds-input" style="width: auto;" onchange={handleInputChange}/>
+                        <input type="text" id="text-input-id-1" placeholder="Type message" class="slds-input" style="width: auto;" onchange={handleInputChange} />
+                       
+                        
                     </div>
                   </div>
 
